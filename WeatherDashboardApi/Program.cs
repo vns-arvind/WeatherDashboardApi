@@ -9,6 +9,7 @@ using WeatherApi.Validators;
 using Polly;
 using Polly.Extensions.Http;
 using System.Net.Http;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,15 @@ builder.Services.AddHttpClient("OpenWeather", client =>
 })
 .AddPolicyHandler(GetRetryPolicy())
 .AddPolicyHandler(GetTimeoutPolicy());
+
+// Configure Serilog
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/weather-api-.log", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add CORS policy
 builder.Services.AddCors(options =>
