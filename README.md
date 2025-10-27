@@ -134,7 +134,7 @@ Fetches user preferences such as default city .
 #### Parameters
 | Parameter | Type | Location | Required | Description |
 |------------|------|-----------|-----------|-------------|
-| `userId` | string | path | ✅ | Unique ID of the user. |
+| `userId` | string | path | True | Unique ID of the user. |
 
 #### Example Request
 ```bash
