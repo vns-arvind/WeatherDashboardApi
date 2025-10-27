@@ -7,6 +7,10 @@ It also supports user preference management through a dedicated API.
 
 ---
 
+## Deployment Strategy
+
+![Weather Dashboard Deplyment](./WeatherDashboardApi/assets/AzureWeatherDashboard.gif)
+
 ## Setup & Installation Guide (Web API)
 
 ### 1 Prerequisites
