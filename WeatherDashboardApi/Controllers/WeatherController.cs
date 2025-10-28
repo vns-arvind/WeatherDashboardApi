@@ -1,3 +1,25 @@
+// -----------------------------------------------------------------------------------------------------
+//  Summary:
+//      This controller provides endpoints to retrieve current weather data based on city names.
+//      It validates incoming query parameters, interacts with the IWeatherService to fetch data
+//      from weather providers, and handles both expected and unexpected errors gracefully.
+//
+//  Endpoint:
+//      GET /api/weather
+//          - Accepts a WeatherQueryDto containing the city name.
+//          - Returns current weather information for the requested city.
+//
+//  Error Handling:
+//      - Returns 400 (Bad Request) for validation errors.
+//      - Returns 502 (Bad Gateway) for upstream or provider-related issues.
+//      - Returns 500 (Internal Server Error) for unexpected exceptions.
+//
+//  Dependencies:
+//      - IWeatherService: Fetches weather data from external or internal sources.
+//      - IValidator<WeatherQueryDto>: Validates query parameters before processing.
+//      - ILogger<WeatherController>: Logs warnings and errors for observability.
+// -----------------------------------------------------------------------------------------------------
+
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,26 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿// -----------------------------------------------------------------------------------------------------
+//  Summary:
+//      This service provides an in-memory implementation of user preference management,
+//      focusing on storing and retrieving a user's default weather location. It uses
+//      IMemoryCache for fast, transient data storage and ILogger for operational logging.
+//
+//  Responsibilities:
+//      - Store a user's default city selection in memory.
+//      - Retrieve the default location for a given user ID.
+//      - Automatically expire cached preferences after a configurable sliding duration.
+//
+//  Dependencies:
+//      - IMemoryCache: Manages temporary storage of user preferences in memory.
+//      - ILogger<UserPreferenceService>: Logs operations such as saving or retrieving preferences.
+//
+//  Caching Policy:
+//      - Each user's default location is cached with a sliding expiration of 6 hours.
+//      - Cache entries reset their lifetime upon access to maintain active users' data.
+//
+//  Error Handling:
+//      - Minimal, as this service operates entirely in-memory and performs simple operations.
+// -----------------------------------------------------------------------------------------------------
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using WeatherApi.Services;
 

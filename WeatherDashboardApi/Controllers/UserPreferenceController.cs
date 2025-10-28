@@ -1,3 +1,25 @@
+// -----------------------------------------------------------------------------------------------------
+//  Summary:
+//      This controller manages user preference operations related to default weather locations.
+//      It exposes API endpoints to set and retrieve a user's default city for weather data.
+//      Input validation is performed using FluentValidation to ensure request integrity.
+//      The controller interacts with IUserPreferenceService for persistence and business logic.
+//
+//  Endpoints:
+//      POST /api/user-preferences/set-default-location
+//          - Validates input and sets the user's default location.
+//      GET /api/user-preferences/{userId}
+//          - Retrieves the user's saved default location.
+//
+//  Error Handling:
+//      - Returns 400 (Bad Request) for validation or argument errors.
+//      - Returns 404 (Not Found) when no location exists for a given user.
+//      - Returns 500 (Internal Server Error) for unexpected exceptions.
+//
+//  Dependencies:
+//      - IUserPreferenceService: Handles storage and retrieval of user preferences.
+//      - IValidator<UserPreferenceDto>: Validates incoming request payloads.
+// -----------------------------------------------------------------------------------------------------
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;

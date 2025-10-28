@@ -1,3 +1,30 @@
+// -----------------------------------------------------------------------------------------------------
+//  Summary:
+//      This service provides the core implementation for retrieving and caching weather data.
+//      It integrates with the OpenWeatherMap API using IHttpClientFactory to fetch real-time
+//      weather information based on city names and returns structured Weather model instances.
+//      The service employs in-memory caching to reduce redundant API calls and improve performance.
+//
+//  Responsibilities:
+//      - Fetch current weather data from the OpenWeatherMap API.
+//      - Cache responses for a short duration to optimize repeated lookups.
+//      - Provide fallback sample data when the API key is missing or external service fails.
+//      - Handle API errors, network failures, and malformed JSON responses gracefully.
+//
+//  Dependencies:
+//      - IHttpClientFactory: Creates named HTTP clients for external API requests.
+//      - IMemoryCache: Stores recently fetched weather results for performance optimization.
+//      - ILogger<WeatherService>: Logs API interactions, cache hits, and errors.
+//      - IOptions<OpenWeatherMapSettings>: Provides configuration and API key settings.
+//
+//  Error Handling:
+//      - Logs and throws InvalidOperationException for provider or parsing issues.
+//      - Returns sample weather data when API key is missing.
+//
+//  Caching Policy:
+//      - Weather data is cached for 5 minutes per city.
+//      - Cache key format: "weather_{city}" (lowercased).
+// -----------------------------------------------------------------------------------------------------
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System.Net;
@@ -87,11 +114,6 @@ namespace WeatherApi.Services
             {
                 _logger.LogError(ex, "Failed to reach OpenWeather API for city {city}", city);
                 throw new InvalidOperationException("Unable to reach weather provider. Please try again later.", ex);
-            }
-            catch (TaskCanceledException ex)
-            {
-                _logger.LogError(ex, "Weather API call timed out for city {city}", city);
-                throw new InvalidOperationException("Weather service timed out. Please try again later.", ex);
             }
         }
 
