@@ -62,13 +62,13 @@ This separation allows the system to evolve without impacting unrelated parts of
 
 ---
 
-### High-Level Integration Overview and UML diagram
+## Component Integration & UML Diagrams
 
-## Component Integration
+### High-Level Integration Overview
 
 ```mermaid
 flowchart LR
-    subgraph Frontend["React Frontend"]
+    subgraph Frontend["🌐 React Frontend"]
         A1[SearchBar Component]
         A2[WeatherDisplay Component]
         A3[DefaultLocation Component]
@@ -76,7 +76,7 @@ flowchart LR
         A5[useUserPreferences Hook]
     end
 
-    subgraph Backend["ASP.NET Core Web API"]
+    subgraph Backend["☁️ ASP.NET Core Web API"]
         B1[WeatherController]
         B2[UserPreferenceController]
         B3[WeatherService]
@@ -85,7 +85,7 @@ flowchart LR
         B6[Polly Retry Policy]
     end
 
-    subgraph External["External APIs"]
+    subgraph External["🌍 External APIs"]
         C1[(OpenWeatherMap API)]
     end
 
@@ -100,14 +100,14 @@ flowchart LR
 
 ---
 
-## UML Class Diagram (ASP.NET Core Web API)
+### UML Class Diagram (ASP.NET Core Web API)
 
 ```mermaid
 classDiagram
     direction LR
 
     class WeatherController {
-        +GetByCity(city: string): IActionResult
+        +GetByCity(city: string, ct: CancellationToken): IActionResult
         -_weather : IWeatherService
         -_logger : ILogger
     }
@@ -121,11 +121,11 @@ classDiagram
 
     class IWeatherService {
         <<interface>>
-        +GetWeatherByCityAsync(city: string): Task<Weather>
+        +GetWeatherByCityAsync(city: string, ct: CancellationToken): Task<Weather>
     }
 
     class WeatherService {
-        +GetWeatherByCityAsync(city: string): Task<Weather>
+        +GetWeatherByCityAsync(city: string, ct: CancellationToken): Task<Weather>
         -_httpFactory : IHttpClientFactory
         -_cache : IMemoryCache
         -_logger : ILogger
