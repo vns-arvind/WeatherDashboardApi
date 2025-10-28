@@ -11,6 +11,122 @@ It also supports user preference management through a dedicated API.
 
 ![Weather Dashboard Deplyment](./WeatherDashboardApi/assets/AzureWeatherDashboard.gif)
 
+## Architectural Reflection
+
+The **Weather API** project follows a **clean and modular architecture** built on **ASP.NET Core Web API**, emphasizing maintainability, testability, and scalability.
+
+### 1. Layered Design
+
+The solution adopts a **layered approach**, separating responsibilities across distinct components:
+
+- **Controllers** – Handle HTTP communication and return standardized responses (`ProblemDetails` for errors).
+- **Services** – Contain business logic (e.g., weather data retrieval, caching, retry policies).
+- **Models** – Define domain entities and response structures.
+- **Dependency Injection** – Centralized in `Program.cs`, promoting flexibility and testability.
+
+This separation allows the system to evolve without impacting unrelated parts of the codebase.
+
+---
+
+### 2. Use of Modern ASP.NET Core Features
+
+- **Dependency Injection** for `IWeatherService` and `IUserPreferenceService`  
+- **FluentValidation** and **ProblemDetails** for clean validation and consistent API error handling  
+- **Polly Retry Policy** for transient HTTP failures  
+- **Memory Caching** for performance  
+- **Logging** via the Serilog
+
+---
+
+### 3. Resilience and Observability
+
+- Transient errors from external APIs are handled with **Polly** (exponential backoff).
+- Logging captures detailed diagnostic information.
+- Errors are standardized as **ProblemDetails** responses for easy client parsing.
+
+---
+
+### 4. Testing and Maintainability
+
+- Unit tests cover both **controllers** and **services**.
+- Common test setup is extracted into `Setup` methods for reusability.
+- The architecture supports **CI/CD** integration and **mock-driven** testing.
+
+---
+
+### 5. Frontend Integration
+
+- React frontend communicates with the API through `fetch` using `/services` hooks.
+- Clear API endpoints and standardized JSON responses simplify integration.
+- Both apps are decoupled but integrated seamlessly through a consistent REST contract.
+
+---
+
+### 6. UML Class Diagram (ASP.NET Core Web API)
+
+```mermaid
+classDiagram
+    direction LR
+
+    class WeatherController {
+        +GetByCity(city: string): IActionResult
+        -_weather : IWeatherService
+        -_logger : ILogger
+    }
+
+    class UserPreferenceController {
+        +GetDefaultLocation(userId: string): IActionResult
+        +SetDefaultLocation(model: UserPreferenceDto): IActionResult
+        -_service : IUserPreferenceService
+        -_validator : IValidator<UserPreferenceDto>
+    }
+
+    class IWeatherService {
+        <<interface>>
+        +GetWeatherByCityAsync(city: string): Task<Weather>
+    }
+
+    class WeatherService {
+        +GetWeatherByCityAsync(city: string): Task<Weather>
+        -_httpFactory : IHttpClientFactory
+        -_cache : IMemoryCache
+        -_logger : ILogger
+        -_apiKey : string
+    }
+
+    class IUserPreferenceService {
+        <<interface>>
+        +GetDefaultLocationAsync(userId: string): Task<string?>
+        +SetDefaultLocationAsync(userId: string, city: string): Task
+    }
+
+    class UserPreferenceService {
+        +GetDefaultLocationAsync(userId: string): Task<string?>
+        +SetDefaultLocationAsync(userId: string, city: string): Task
+        -_cache : IMemoryCache
+        -_logger : ILogger
+    }
+
+    class Weather {
+        +City : string
+        +Country : string
+        +Temperature : double
+        +Description : string
+        +Humidity : int
+        +WindSpeed : double
+    }
+
+    WeatherController --> IWeatherService
+    UserPreferenceController --> IUserPreferenceService
+    WeatherService ..|> IWeatherService
+    UserPreferenceService ..|> IUserPreferenceService
+    WeatherService --> Weather
+    WeatherService --> IMemoryCache
+    UserPreferenceService --> IMemoryCache
+```
+
+---
+
 ## Setup & Installation Guide (Web API)
 
 ### 1 Prerequisites
