@@ -30,7 +30,7 @@ builder.Services.Configure<OpenWeatherMapSettings>(
 builder.Services.AddHttpClient("OpenWeather", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["OpenWeatherMap:BaseUrl"]);
-    client.Timeout = TimeSpan.FromSeconds(10); // avoid hanging requests
+    //client.Timeout = TimeSpan.FromSeconds(10); // avoid hanging requests
 })
 .AddPolicyHandler(GetRetryPolicy())
 .AddPolicyHandler(GetTimeoutPolicy());

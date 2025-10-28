@@ -48,6 +48,7 @@ public class UserPreferenceController : ControllerBase
             var problemDetails = new ValidationProblemDetails(result.ToDictionary())
             {
                 Title = "Input validation errors occurred",
+                Detail = "Invalid input",
                 Status = StatusCodes.Status400BadRequest
             };
             return BadRequest(problemDetails);
@@ -91,6 +92,7 @@ public class UserPreferenceController : ControllerBase
             var problem = new ProblemDetails
             {
                 Title = "UserId is required",
+                Detail = "UserId is missing",
                 Status = StatusCodes.Status400BadRequest
             };
             return BadRequest(problem);
@@ -104,6 +106,7 @@ public class UserPreferenceController : ControllerBase
                 return NotFound(new ProblemDetails
                 {
                     Title = $"No default location found for user '{userId}'",
+                    Detail = "City is required",
                     Status = StatusCodes.Status404NotFound
                 });
             }
